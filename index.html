@@ -120,6 +120,37 @@
             cursor: pointer;
         }
 
+        .font-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .font-control button {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .font-control button:hover {
+            background: var(--drc-accent);
+            color: white;
+            border-color: var(--drc-accent);
+        }
+
+        .font-control span {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
         .nav-controls {
             display: flex;
             gap: 8px;
@@ -184,7 +215,7 @@
             transition: transform 0.3s;
         }
 
-        /* SLIDES BASE */
+        /* SLIDES */
         .slide {
             position: absolute;
             top: 0;
@@ -598,13 +629,14 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        /* SLIDE 6 */
+        /* SLIDE 6 - CORRIGIDO */
         .slide-6 {
             background: var(--drc-primary);
             color: white;
-            padding: 120px;
+            padding: 100px;
             display: flex;
             flex-direction: column;
+            height: 100%;
             position: relative;
             overflow: hidden;
         }
@@ -625,48 +657,50 @@
             text-transform: uppercase;
             color: var(--drc-accent);
             font-weight: 700;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             position: relative;
             z-index: 2;
         }
 
         .s6-quote {
             font-family: var(--font-display);
-            font-size: 56px;
+            font-size: 52px;
             line-height: 1.2;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             font-weight: 600;
             position: relative;
             z-index: 2;
+            max-width: 85%;
         }
 
         .s6-section {
             border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 60px;
+            padding-top: 50px;
             position: relative;
             z-index: 2;
             margin-top: auto;
+            margin-bottom: 60px;
         }
 
         .s6-label {
             font-size: 13px;
             letter-spacing: 0.3em;
+            text-transform: uppercase;
             color: var(--drc-accent);
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .s6-cta {
             font-family: var(--font-display);
-            font-size: 36px;
-            margin-bottom: 40px;
+            font-size: 32px;
+            margin-bottom: 30px;
             font-weight: 600;
         }
 
         .s6-link {
-            font-size: 18px;
+            font-size: 17px;
             opacity: 0.9;
-            margin-bottom: 60px;
         }
 
         .s6-footer {
@@ -677,6 +711,9 @@
             opacity: 0.8;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 30px;
+            position: relative;
+            z-index: 2;
+            margin-top: auto;
         }
 
         .s6-brand {
@@ -757,11 +794,13 @@
             margin-top: 60px;
         }
 
-        /* SLIDE 8 */
+        /* SLIDE 8 - CORRIGIDO */
         .slide-8 {
             padding: 100px;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            background: white;
             position: relative;
         }
 
@@ -788,44 +827,45 @@
 
         .s8-quote {
             font-family: var(--font-display);
-            font-size: 52px;
+            font-size: 48px;
             color: var(--drc-primary);
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             font-weight: 700;
             line-height: 1.2;
-            padding: 0 60px;
+            padding: 0 40px;
         }
 
         .s8-box {
             background: var(--drc-primary);
             color: white;
-            padding: 70px 60px;
+            padding: 60px;
             text-align: center;
             border-radius: 8px;
-            margin: 0 60px;
+            margin: 0 40px;
         }
 
         .s8-label {
             font-size: 13px;
             letter-spacing: 0.3em;
+            text-transform: uppercase;
             color: var(--drc-accent);
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .s8-cta {
             font-family: var(--font-display);
-            font-size: 36px;
-            margin-bottom: 40px;
+            font-size: 32px;
+            margin-bottom: 30px;
             font-weight: 600;
         }
 
         .s8-contacts {
             display: flex;
             justify-content: center;
-            gap: 60px;
-            font-size: 18px;
+            gap: 50px;
+            font-size: 17px;
             opacity: 0.9;
         }
 
@@ -887,13 +927,13 @@
         }
         @media (max-width: 900px) {
             .app-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-            .editor-panel { max-height: 220px; flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid #e0e0e0; }
-            .control-group { flex: 1; min-width: 200px; }
+            .editor-panel { max-height: 240px; flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid #e0e0e0; padding: 16px; }
+            .control-group { flex: 1; min-width: 180px; margin-bottom: 10px; }
             .viewport { transform: scale(0.45); }
         }
         @media (max-width: 600px) {
             .viewport { transform: scale(0.35); }
-            .editor-panel { max-height: 180px; }
+            .editor-panel { max-height: 200px; }
         }
     </style>
 </head>
@@ -926,6 +966,15 @@
             </div>
 
             <div class="control-group">
+                <h3>Tamanho da Fonte</h3>
+                <div class="font-control">
+                    <button onclick="changeFontSize(-2)">A-</button>
+                    <span id="fontSizeDisplay">100%</span>
+                    <button onclick="changeFontSize(2)">A+</button>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <h3>Exportar</h3>
                 <button class="btn btn-export" onclick="exportSlide()">Download PNG (1080×1350)</button>
                 <button class="btn btn-secondary" onclick="saveJSON()">Salvar JSON</button>
@@ -946,7 +995,7 @@
 
         <main class="preview-area">
             <div class="viewport" id="viewport">
-                <!-- SLIDE 1 -->
+                <!-- SLIDES 1-5 (mantidos iguais) -->
                 <div class="slide slide-1 active" data-index="0">
                     <div class="s1-header" contenteditable="false">CONTEÚDO JURÍDICO</div>
                     <div class="s1-content">
@@ -965,7 +1014,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 2 -->
                 <div class="slide slide-2" data-index="1">
                     <div class="s2-image">IMAGEM DE APOIO</div>
                     <div class="s2-content">
@@ -976,7 +1024,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 3 -->
                 <div class="slide slide-3" data-index="2">
                     <div class="s3-header">CONTEXTO</div>
                     <h2 class="s3-title" contenteditable="false">Título que apresenta o panorama do tema</h2>
@@ -990,7 +1037,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 4 -->
                 <div class="slide slide-4" data-index="3">
                     <div class="s4-header">
                         <div class="s4-kicker">O QUE VOCÊ PRECISA SABER</div>
@@ -1032,7 +1078,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 5 -->
                 <div class="slide slide-5" data-index="4">
                     <div class="s5-kicker">EXPLICAÇÃO TÉCNICA</div>
                     <h2 class="s5-title" contenteditable="false">Como funciona na prática jurídica</h2>
@@ -1053,7 +1098,7 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 6 -->
+                <!-- SLIDE 6 CORRIGIDO -->
                 <div class="slide slide-6" data-index="5">
                     <div class="s6-header">FECHAMENTO</div>
                     <blockquote class="s6-quote" contenteditable="false">"Frase final de impacto e convicção."</blockquote>
@@ -1071,7 +1116,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 7 -->
                 <div class="slide slide-7" data-index="6">
                     <div class="s7-visual">
                         <div class="s7-brand">DRC Advogados —</div>
@@ -1088,7 +1132,7 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 8 -->
+                <!-- SLIDE 8 CORRIGIDO -->
                 <div class="slide slide-8" data-index="7">
                     <div class="s8-header">FECHAMENTO</div>
                     <blockquote class="s8-quote" contenteditable="false">"Frase de encerramento com força e autoridade."</blockquote>
@@ -1120,6 +1164,7 @@
         let currentSlide = 0;
         let isEditing = false;
         let currentZoom = 0.7;
+        let currentFontScale = 100;
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
 
@@ -1168,6 +1213,20 @@
             });
         }
 
+        // Tamanho da Fonte
+        function changeFontSize(delta) {
+            currentFontScale = Math.max(80, Math.min(130, currentFontScale + delta));
+            document.getElementById('fontSizeDisplay').textContent = currentFontScale + '%';
+            
+            const activeSlide = slides[currentSlide];
+            activeSlide.style.fontSize = currentFontScale + '%';
+            
+            // Ajustar elementos específicos proporcionalmente
+            activeSlide.querySelectorAll('h1, h2, h3, .s1-title, .s2-quote, .s3-title, .s4-title, .s5-title, .s6-quote, .s7-title, .s8-quote').forEach(el => {
+                el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * (1 + delta/200)) + 'px';
+            });
+        }
+
         // Cores
         function updateColor(variable, value) {
             document.documentElement.style.setProperty(variable, value);
@@ -1209,7 +1268,10 @@
         async function exportSlide() {
             const slide = slides[currentSlide];
             
-            // Criar clone para exportação
+            // Resetar tamanho da fonte temporariamente para exportação
+            const originalFontSize = slide.style.fontSize;
+            slide.style.fontSize = '';
+            
             const clone = slide.cloneNode(true);
             clone.style.cssText = `
                 position: fixed;
@@ -1222,9 +1284,9 @@
                 transform: none;
                 margin: 0;
                 z-index: 9999;
+                font-size: 100% !important;
             `;
             
-            // Remover classes de edição
             clone.classList.remove('editing');
             clone.querySelectorAll('[contenteditable]').forEach(el => {
                 el.setAttribute('contenteditable', 'false');
@@ -1253,9 +1315,9 @@
                 link.click();
             } catch (e) {
                 alert('Erro ao exportar: ' + e.message);
-                console.error(e);
             } finally {
                 document.body.removeChild(clone);
+                slide.style.fontSize = originalFontSize;
             }
         }
 
@@ -1292,7 +1354,6 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     alert('Configuração carregada com sucesso! ' + data.slides.length + ' slides importados.');
-                    // Aqui você pode implementar a lógica para preencher os slides
                 } catch (err) {
                     alert('Erro ao carregar JSON: ' + err.message);
                 }
