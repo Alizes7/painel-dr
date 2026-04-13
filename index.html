@@ -120,6 +120,37 @@
             cursor: pointer;
         }
 
+        /* NOVOS ESTILOS PARA CONTROLE DE FONTE INDIVIDUAL */
+        .font-control-panel {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .selected-info {
+            font-size: 12px;
+            color: #5a6c7d;
+            margin-bottom: 12px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(201, 169, 97, 0.1);
+            border-radius: 4px;
+            border: 1px dashed var(--drc-accent);
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .selected-info.empty {
+            background: #f0f0f0;
+            border: 1px dashed #ccc;
+            font-weight: 400;
+        }
+
         .font-control {
             display: flex;
             align-items: center;
@@ -128,27 +159,49 @@
         }
 
         .font-control button {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border: 1px solid #e0e0e0;
             background: white;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
+            transition: all 0.2s;
         }
 
-        .font-control button:hover {
+        .font-control button:hover:not(:disabled) {
             background: var(--drc-accent);
             color: white;
             border-color: var(--drc-accent);
         }
 
+        .font-control button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .font-control span {
             flex: 1;
             text-align: center;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--drc-primary);
+            font-family: var(--font-display);
+        }
+
+        .font-reset {
+            font-size: 11px;
+            color: #5a6c7d;
+            text-decoration: underline;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .font-reset:hover {
+            color: var(--drc-primary);
         }
 
         .nav-controls {
@@ -239,6 +292,16 @@
             outline-offset: 4px;
             cursor: text;
             background: rgba(201,169,97,0.05);
+        }
+
+        /* DESTAQUE PARA ELEMENTO SELECIONADO */
+        .slide.editing [contenteditable="true"].selected-text {
+            outline: 3px solid var(--drc-primary) !important;
+            outline-offset: 4px;
+            background: rgba(30, 58, 95, 0.08);
+            box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
+            position: relative;
+            z-index: 100;
         }
 
         /* SLIDE 1 */
@@ -629,7 +692,7 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        /* SLIDE 6 - CORRIGIDO */
+        /* SLIDE 6 */
         .slide-6 {
             background: var(--drc-primary);
             color: white;
@@ -794,7 +857,7 @@
             margin-top: 60px;
         }
 
-        /* SLIDE 8 - CORRIGIDO */
+        /* SLIDE 8 */
         .slide-8 {
             padding: 100px;
             display: flex;
@@ -965,12 +1028,19 @@
                 </div>
             </div>
 
-            <div class="control-group">
-                <h3>Tamanho da Fonte</h3>
-                <div class="font-control">
-                    <button onclick="changeFontSize(-2)">A-</button>
-                    <span id="fontSizeDisplay">100%</span>
-                    <button onclick="changeFontSize(2)">A+</button>
+            <!-- NOVO CONTROLE DE FONTE INDIVIDUAL -->
+            <div class="control-group" id="fontControlGroup" style="display: none;">
+                <h3>Ajuste de Texto Individual</h3>
+                <div class="font-control-panel">
+                    <div class="selected-info empty" id="selectedInfo">
+                        Selecione um texto no slide
+                    </div>
+                    <div class="font-control">
+                        <button onclick="changeSelectedFontSize(-2)" id="btnDecrease" disabled>−</button>
+                        <span id="fontSizeDisplay">—</span>
+                        <button onclick="changeSelectedFontSize(2)" id="btnIncrease" disabled>+</button>
+                    </div>
+                    <span class="font-reset" onclick="resetSelectedFontSize()" id="btnReset" style="display: none;">Restaurar tamanho original</span>
                 </div>
             </div>
 
@@ -994,8 +1064,8 @@
         </aside>
 
         <main class="preview-area">
-            <div class="viewport" id="viewport">
-                <!-- SLIDES 1-5 (mantidos iguais) -->
+            <div class="viewport" id="viewport" onclick="handleViewportClick(event)">
+                <!-- SLIDES -->
                 <div class="slide slide-1 active" data-index="0">
                     <div class="s1-header" contenteditable="false">CONTEÚDO JURÍDICO</div>
                     <div class="s1-content">
@@ -1098,7 +1168,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 6 CORRIGIDO -->
                 <div class="slide slide-6" data-index="5">
                     <div class="s6-header">FECHAMENTO</div>
                     <blockquote class="s6-quote" contenteditable="false">"Frase final de impacto e convicção."</blockquote>
@@ -1132,7 +1201,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDE 8 CORRIGIDO -->
                 <div class="slide slide-8" data-index="7">
                     <div class="s8-header">FECHAMENTO</div>
                     <blockquote class="s8-quote" contenteditable="false">"Frase de encerramento com força e autoridade."</blockquote>
@@ -1164,20 +1232,29 @@
         let currentSlide = 0;
         let isEditing = false;
         let currentZoom = 0.7;
-        let currentFontScale = 100;
+        let selectedElement = null;
+        let originalFontSizes = new Map(); // Armazena tamanhos originais
+        
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
 
-        // Inicializar
         function init() {
             updateThumbs();
             updateCounter();
             calculateZoom();
             window.addEventListener('resize', calculateZoom);
+            
+            // Salvar tamanhos originais ao iniciar
+            document.querySelectorAll('[contenteditable]').forEach((el, idx) => {
+                const computed = window.getComputedStyle(el);
+                originalFontSizes.set(el, parseInt(computed.fontSize));
+            });
         }
 
-        // Navegação
         function changeSlide(dir) {
+            // Desseleciona elemento ao trocar de slide
+            deselectElement();
+            
             slides[currentSlide].classList.remove('active');
             currentSlide += dir;
             if (currentSlide < 0) currentSlide = 0;
@@ -1189,6 +1266,7 @@
         }
 
         function goToSlide(index) {
+            deselectElement();
             slides[currentSlide].classList.remove('active');
             currentSlide = index;
             slides[currentSlide].classList.add('active');
@@ -1197,11 +1275,19 @@
             if (isEditing) updateEditMode();
         }
 
-        // Edição
         function toggleEdit() {
             isEditing = !isEditing;
             document.getElementById('editStatus').textContent = isEditing ? 'ON' : 'OFF';
             document.getElementById('btnEdit').classList.toggle('active', isEditing);
+            
+            // Mostra/esconde controles de fonte individual
+            const fontGroup = document.getElementById('fontControlGroup');
+            fontGroup.style.display = isEditing ? 'block' : 'none';
+            
+            if (!isEditing) {
+                deselectElement();
+            }
+            
             updateEditMode();
         }
 
@@ -1213,21 +1299,100 @@
             });
         }
 
-        // Tamanho da Fonte
-        function changeFontSize(delta) {
-            currentFontScale = Math.max(80, Math.min(130, currentFontScale + delta));
-            document.getElementById('fontSizeDisplay').textContent = currentFontScale + '%';
+        // NOVA FUNÇÃO: Clique no viewport para selecionar elemento
+        function handleViewportClick(event) {
+            if (!isEditing) return;
             
-            const activeSlide = slides[currentSlide];
-            activeSlide.style.fontSize = currentFontScale + '%';
+            const target = event.target;
             
-            // Ajustar elementos específicos proporcionalmente
-            activeSlide.querySelectorAll('h1, h2, h3, .s1-title, .s2-quote, .s3-title, .s4-title, .s5-title, .s6-quote, .s7-title, .s8-quote').forEach(el => {
-                el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * (1 + delta/200)) + 'px';
-            });
+            // Se clicou em um elemento editável
+            if (target.hasAttribute('contenteditable') && target.getAttribute('contenteditable') === 'true') {
+                selectElement(target);
+                event.stopPropagation();
+            } else {
+                // Se clicou fora, desseleciona
+                deselectElement();
+            }
         }
 
-        // Cores
+        function selectElement(element) {
+            // Remove seleção anterior
+            if (selectedElement) {
+                selectedElement.classList.remove('selected-text');
+            }
+            
+            selectedElement = element;
+            element.classList.add('selected-text');
+            
+            // Atualiza UI dos controles
+            const computed = window.getComputedStyle(element);
+            const currentSize = parseInt(computed.fontSize);
+            
+            document.getElementById('selectedInfo').textContent = getElementLabel(element);
+            document.getElementById('selectedInfo').classList.remove('empty');
+            document.getElementById('fontSizeDisplay').textContent = currentSize + 'px';
+            
+            // Habilita botões
+            document.getElementById('btnDecrease').disabled = false;
+            document.getElementById('btnIncrease').disabled = false;
+            document.getElementById('btnReset').style.display = 'block';
+        }
+
+        function deselectElement() {
+            if (selectedElement) {
+                selectedElement.classList.remove('selected-text');
+                selectedElement = null;
+            }
+            
+            document.getElementById('selectedInfo').textContent = 'Selecione um texto no slide';
+            document.getElementById('selectedInfo').classList.add('empty');
+            document.getElementById('fontSizeDisplay').textContent = '—';
+            
+            // Desabilita botões
+            document.getElementById('btnDecrease').disabled = true;
+            document.getElementById('btnIncrease').disabled = true;
+            document.getElementById('btnReset').style.display = 'none';
+        }
+
+        function getElementLabel(element) {
+            // Tenta identificar o tipo de elemento para mostrar no painel
+            const classes = element.className.split(' ');
+            if (classes.includes('s1-title') || classes.includes('s7-title')) return 'Título Principal';
+            if (classes.includes('s2-quote') || classes.includes('s6-quote') || classes.includes('s8-quote')) return 'Citação/Quote';
+            if (classes.includes('s3-title')) return 'Título do Contexto';
+            if (classes.includes('s4-title')) return 'Título da Seção';
+            if (classes.includes('s5-title')) return 'Subtítulo Técnico';
+            if (classes.includes('s3-context') || classes.includes('s2-text')) return 'Parágrafo de Texto';
+            if (classes.includes('s3-point')) return 'Item de Lista';
+            if (element.tagName === 'H3') return 'Tópico';
+            if (element.tagName === 'H4') return 'Subtítulo';
+            if (classes.includes('s6-cta') || classes.includes('s8-cta')) return 'Call to Action';
+            return 'Texto Selecionado';
+        }
+
+        function changeSelectedFontSize(delta) {
+            if (!selectedElement) return;
+            
+            const computed = window.getComputedStyle(selectedElement);
+            const currentSize = parseInt(computed.fontSize);
+            const newSize = Math.max(8, Math.min(120, currentSize + delta));
+            
+            selectedElement.style.fontSize = newSize + 'px';
+            document.getElementById('fontSizeDisplay').textContent = newSize + 'px';
+        }
+
+        function resetSelectedFontSize() {
+            if (!selectedElement) return;
+            
+            // Remove o style inline para voltar ao CSS original
+            selectedElement.style.fontSize = '';
+            
+            // Atualiza display
+            const computed = window.getComputedStyle(selectedElement);
+            const currentSize = parseInt(computed.fontSize);
+            document.getElementById('fontSizeDisplay').textContent = currentSize + 'px';
+        }
+
         function updateColor(variable, value) {
             document.documentElement.style.setProperty(variable, value);
             if (variable === '--drc-primary') {
@@ -1244,7 +1409,6 @@
             return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
         }
 
-        // Zoom
         function calculateZoom() {
             const wrapper = document.querySelector('.preview-area');
             const availableHeight = wrapper.clientHeight - 100;
@@ -1264,13 +1428,12 @@
             document.getElementById('zoomText').textContent = Math.round(currentZoom * 100) + '%';
         }
 
-        // Exportação
         async function exportSlide() {
             const slide = slides[currentSlide];
             
-            // Resetar tamanho da fonte temporariamente para exportação
-            const originalFontSize = slide.style.fontSize;
-            slide.style.fontSize = '';
+            // Desseleciona elemento para não aparecer a borda na exportação
+            const wasSelected = selectedElement;
+            if (wasSelected) wasSelected.classList.remove('selected-text');
             
             const clone = slide.cloneNode(true);
             clone.style.cssText = `
@@ -1284,7 +1447,6 @@
                 transform: none;
                 margin: 0;
                 z-index: 9999;
-                font-size: 100% !important;
             `;
             
             clone.classList.remove('editing');
@@ -1317,21 +1479,29 @@
                 alert('Erro ao exportar: ' + e.message);
             } finally {
                 document.body.removeChild(clone);
-                slide.style.fontSize = originalFontSize;
+                if (wasSelected) wasSelected.classList.add('selected-text');
             }
         }
 
-        // JSON
         function saveJSON() {
             const data = {
-                versao: '1.0',
+                versao: '2.0',
+                slideAtual: currentSlide,
                 slides: []
             };
             
             slides.forEach((slide, idx) => {
-                const slideData = { id: idx + 1 };
+                const slideData = { 
+                    id: idx + 1,
+                    elementos: []
+                };
+                
                 slide.querySelectorAll('[contenteditable]').forEach((el, i) => {
-                    slideData[`campo_${i}`] = el.innerText;
+                    slideData.elementos.push({
+                        indice: i,
+                        texto: el.innerText,
+                        fontSize: el.style.fontSize || null
+                    });
                 });
                 data.slides.push(slideData);
             });
@@ -1353,7 +1523,29 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    alert('Configuração carregada com sucesso! ' + data.slides.length + ' slides importados.');
+                    if (data.slides) {
+                        data.slides.forEach((slideData, sIdx) => {
+                            if (slideData.elementos && slides[sIdx]) {
+                                const slide = slides[sIdx];
+                                const editables = slide.querySelectorAll('[contenteditable]');
+                                
+                                slideData.elementos.forEach(elem => {
+                                    if (editables[elem.indice]) {
+                                        editables[elem.indice].innerText = elem.texto;
+                                        if (elem.fontSize) {
+                                            editables[elem.indice].style.fontSize = elem.fontSize;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        
+                        if (data.slideAtual !== undefined) {
+                            goToSlide(data.slideAtual);
+                        }
+                        
+                        alert('Configuração carregada com sucesso!');
+                    }
                 } catch (err) {
                     alert('Erro ao carregar JSON: ' + err.message);
                 }
@@ -1367,7 +1559,6 @@
             }
         }
 
-        // UI Updates
         function updateCounter() {
             document.getElementById('slideNum').textContent = 
                 String(currentSlide + 1).padStart(2, '0') + ' / 08';
@@ -1386,7 +1577,6 @@
             }
         }
 
-        // Iniciar
         init();
     </script>
 </body>
