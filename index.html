@@ -274,7 +274,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 1350px; /* ALTURA FIXA EXPLICITA */
             opacity: 0;
             visibility: hidden;
             overflow: hidden;
@@ -415,7 +415,7 @@
         .slide-2 {
             display: grid;
             grid-template-columns: 45% 55%;
-            height: 100%;
+            height: 1350px;
         }
 
         .s2-image {
@@ -474,6 +474,7 @@
             padding: 100px 120px;
             display: flex;
             flex-direction: column;
+            height: 1350px;
         }
 
         .s3-header {
@@ -547,6 +548,7 @@
             padding: 100px;
             display: flex;
             flex-direction: column;
+            height: 1350px;
         }
 
         .s4-header {
@@ -620,6 +622,7 @@
             padding: 100px;
             display: flex;
             flex-direction: column;
+            height: 1350px;
         }
 
         .s5-kicker {
@@ -692,17 +695,17 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        /* SLIDE 6 - CORRIGIDO */
+        /* SLIDE 6 - CORRIGIDO DEFINITIVAMENTE */
         .slide-6 {
             background: var(--drc-primary);
             color: white;
-            width: 100%;
-            height: 100%;
+            width: 1080px;
+            height: 1350px;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            padding: 80px;
+            padding: 100px 80px;
         }
 
         .slide-6::before {
@@ -713,6 +716,7 @@
             width: 800px;
             height: 800px;
             background: radial-gradient(circle, rgba(201, 169, 97, 0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .s6-header {
@@ -730,7 +734,7 @@
             font-family: var(--font-display);
             font-size: 52px;
             line-height: 1.2;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             font-weight: 600;
             position: relative;
             z-index: 2;
@@ -742,8 +746,7 @@
             padding-top: 50px;
             position: relative;
             z-index: 2;
-            margin-top: auto;
-            margin-bottom: 40px;
+            margin-bottom: 80px;
         }
 
         .s6-label {
@@ -757,13 +760,13 @@
 
         .s6-cta {
             font-family: var(--font-display);
-            font-size: 32px;
-            margin-bottom: 30px;
+            font-size: 36px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .s6-link {
-            font-size: 17px;
+            font-size: 18px;
             opacity: 0.9;
         }
 
@@ -777,19 +780,21 @@
             padding-top: 30px;
             position: relative;
             z-index: 2;
+            margin-top: auto;
         }
 
         .s6-brand {
             font-family: var(--font-display);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
+            margin-bottom: 4px;
         }
 
         /* SLIDE 7 */
         .slide-7 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            height: 100%;
+            height: 1350px;
         }
 
         .s7-visual {
@@ -857,10 +862,10 @@
             margin-top: 60px;
         }
 
-        /* SLIDE 8 - CORRIGIDO */
+        /* SLIDE 8 - CORRIGIDO DEFINITIVAMENTE */
         .slide-8 {
-            width: 100%;
-            height: 100%;
+            width: 1080px;
+            height: 1350px;
             background: white;
             position: relative;
             display: flex;
@@ -884,7 +889,7 @@
             text-transform: uppercase;
             color: var(--drc-accent);
             font-weight: 700;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             text-align: center;
             margin-top: 20px;
         }
@@ -894,7 +899,7 @@
             font-size: 48px;
             color: var(--drc-primary);
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             font-weight: 700;
             line-height: 1.2;
             padding: 0 40px;
@@ -903,10 +908,10 @@
         .s8-box {
             background: var(--drc-primary);
             color: white;
-            padding: 50px;
+            padding: 60px 50px;
             text-align: center;
             border-radius: 8px;
-            margin: 0 20px;
+            margin-bottom: 60px;
         }
 
         .s8-label {
@@ -920,8 +925,8 @@
 
         .s8-cta {
             font-family: var(--font-display);
-            font-size: 32px;
-            margin-bottom: 30px;
+            font-size: 36px;
+            margin-bottom: 25px;
             font-weight: 600;
         }
 
@@ -1029,7 +1034,6 @@
                 </div>
             </div>
 
-            <!-- NOVO CONTROLE DE FONTE INDIVIDUAL -->
             <div class="control-group" id="fontControlGroup" style="display: none;">
                 <h3>Ajuste de Texto Individual</h3>
                 <div class="font-control-panel">
@@ -1066,7 +1070,7 @@
 
         <main class="preview-area">
             <div class="viewport" id="viewport" onclick="handleViewportClick(event)">
-                <!-- SLIDES 1-5 (mantidos iguais) -->
+                <!-- SLIDES 1-5 -->
                 <div class="slide slide-1 active" data-index="0">
                     <div class="s1-header" contenteditable="false">CONTEÚDO JURÍDICO</div>
                     <div class="s1-content">
