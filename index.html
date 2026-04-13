@@ -692,16 +692,17 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        /* SLIDE 6 */
+        /* SLIDE 6 - CORRIGIDO */
         .slide-6 {
             background: var(--drc-primary);
             color: white;
-            padding: 100px;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
             height: 100%;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 80px;
         }
 
         .slide-6::before {
@@ -733,7 +734,7 @@
             font-weight: 600;
             position: relative;
             z-index: 2;
-            max-width: 85%;
+            max-width: 90%;
         }
 
         .s6-section {
@@ -742,7 +743,7 @@
             position: relative;
             z-index: 2;
             margin-top: auto;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
 
         .s6-label {
@@ -776,7 +777,6 @@
             padding-top: 30px;
             position: relative;
             z-index: 2;
-            margin-top: auto;
         }
 
         .s6-brand {
@@ -857,14 +857,15 @@
             margin-top: 60px;
         }
 
-        /* SLIDE 8 */
+        /* SLIDE 8 - CORRIGIDO */
         .slide-8 {
-            padding: 100px;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
             height: 100%;
             background: white;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 100px 80px;
         }
 
         .slide-8::before {
@@ -883,7 +884,7 @@
             text-transform: uppercase;
             color: var(--drc-accent);
             font-weight: 700;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             text-align: center;
             margin-top: 20px;
         }
@@ -893,7 +894,7 @@
             font-size: 48px;
             color: var(--drc-primary);
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             font-weight: 700;
             line-height: 1.2;
             padding: 0 40px;
@@ -902,10 +903,10 @@
         .s8-box {
             background: var(--drc-primary);
             color: white;
-            padding: 60px;
+            padding: 50px;
             text-align: center;
             border-radius: 8px;
-            margin: 0 40px;
+            margin: 0 20px;
         }
 
         .s8-label {
@@ -940,7 +941,7 @@
             color: #5a6c7d;
             font-weight: 600;
             border-top: 1px solid #e0e0e0;
-            padding-top: 40px;
+            padding-top: 30px;
         }
 
         /* ZOOM */
@@ -1065,7 +1066,7 @@
 
         <main class="preview-area">
             <div class="viewport" id="viewport" onclick="handleViewportClick(event)">
-                <!-- SLIDES -->
+                <!-- SLIDES 1-5 (mantidos iguais) -->
                 <div class="slide slide-1 active" data-index="0">
                     <div class="s1-header" contenteditable="false">CONTEÚDO JURÍDICO</div>
                     <div class="s1-content">
@@ -1168,6 +1169,7 @@
                     </div>
                 </div>
 
+                <!-- SLIDE 6 CORRIGIDO -->
                 <div class="slide slide-6" data-index="5">
                     <div class="s6-header">FECHAMENTO</div>
                     <blockquote class="s6-quote" contenteditable="false">"Frase final de impacto e convicção."</blockquote>
@@ -1201,6 +1203,7 @@
                     </div>
                 </div>
 
+                <!-- SLIDE 8 CORRIGIDO -->
                 <div class="slide slide-8" data-index="7">
                     <div class="s8-header">FECHAMENTO</div>
                     <blockquote class="s8-quote" contenteditable="false">"Frase de encerramento com força e autoridade."</blockquote>
@@ -1233,7 +1236,7 @@
         let isEditing = false;
         let currentZoom = 0.7;
         let selectedElement = null;
-        let originalFontSizes = new Map(); // Armazena tamanhos originais
+        let originalFontSizes = new Map();
         
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
@@ -1244,7 +1247,6 @@
             calculateZoom();
             window.addEventListener('resize', calculateZoom);
             
-            // Salvar tamanhos originais ao iniciar
             document.querySelectorAll('[contenteditable]').forEach((el, idx) => {
                 const computed = window.getComputedStyle(el);
                 originalFontSizes.set(el, parseInt(computed.fontSize));
@@ -1252,9 +1254,7 @@
         }
 
         function changeSlide(dir) {
-            // Desseleciona elemento ao trocar de slide
             deselectElement();
-            
             slides[currentSlide].classList.remove('active');
             currentSlide += dir;
             if (currentSlide < 0) currentSlide = 0;
@@ -1280,7 +1280,6 @@
             document.getElementById('editStatus').textContent = isEditing ? 'ON' : 'OFF';
             document.getElementById('btnEdit').classList.toggle('active', isEditing);
             
-            // Mostra/esconde controles de fonte individual
             const fontGroup = document.getElementById('fontControlGroup');
             fontGroup.style.display = isEditing ? 'block' : 'none';
             
@@ -1299,24 +1298,20 @@
             });
         }
 
-        // NOVA FUNÇÃO: Clique no viewport para selecionar elemento
         function handleViewportClick(event) {
             if (!isEditing) return;
             
             const target = event.target;
             
-            // Se clicou em um elemento editável
             if (target.hasAttribute('contenteditable') && target.getAttribute('contenteditable') === 'true') {
                 selectElement(target);
                 event.stopPropagation();
             } else {
-                // Se clicou fora, desseleciona
                 deselectElement();
             }
         }
 
         function selectElement(element) {
-            // Remove seleção anterior
             if (selectedElement) {
                 selectedElement.classList.remove('selected-text');
             }
@@ -1324,7 +1319,6 @@
             selectedElement = element;
             element.classList.add('selected-text');
             
-            // Atualiza UI dos controles
             const computed = window.getComputedStyle(element);
             const currentSize = parseInt(computed.fontSize);
             
@@ -1332,7 +1326,6 @@
             document.getElementById('selectedInfo').classList.remove('empty');
             document.getElementById('fontSizeDisplay').textContent = currentSize + 'px';
             
-            // Habilita botões
             document.getElementById('btnDecrease').disabled = false;
             document.getElementById('btnIncrease').disabled = false;
             document.getElementById('btnReset').style.display = 'block';
@@ -1348,14 +1341,12 @@
             document.getElementById('selectedInfo').classList.add('empty');
             document.getElementById('fontSizeDisplay').textContent = '—';
             
-            // Desabilita botões
             document.getElementById('btnDecrease').disabled = true;
             document.getElementById('btnIncrease').disabled = true;
             document.getElementById('btnReset').style.display = 'none';
         }
 
         function getElementLabel(element) {
-            // Tenta identificar o tipo de elemento para mostrar no painel
             const classes = element.className.split(' ');
             if (classes.includes('s1-title') || classes.includes('s7-title')) return 'Título Principal';
             if (classes.includes('s2-quote') || classes.includes('s6-quote') || classes.includes('s8-quote')) return 'Citação/Quote';
@@ -1383,11 +1374,7 @@
 
         function resetSelectedFontSize() {
             if (!selectedElement) return;
-            
-            // Remove o style inline para voltar ao CSS original
             selectedElement.style.fontSize = '';
-            
-            // Atualiza display
             const computed = window.getComputedStyle(selectedElement);
             const currentSize = parseInt(computed.fontSize);
             document.getElementById('fontSizeDisplay').textContent = currentSize + 'px';
@@ -1430,8 +1417,6 @@
 
         async function exportSlide() {
             const slide = slides[currentSlide];
-            
-            // Desseleciona elemento para não aparecer a borda na exportação
             const wasSelected = selectedElement;
             if (wasSelected) wasSelected.classList.remove('selected-text');
             
